@@ -27,7 +27,7 @@ const BlogTitles = () => {
 
           <div className='mt-3 flex gap-3 flex-wrap sm:max-w-9/11'>
             {blogCategories.map((item)=> (
-              <span onClick={()=> setSelectedCategory(item)} className={`text-xs px-4 py-1 border rounded-full cursor-pointer ${selectedCategory === item.text ? 'bg-purple-50 text-purple-700' : 'text-gray-500 border-gray-300'}`} key={item}>{item}</span>
+              <span onClick={()=> setSelectedCategory(item)} className={`text-xs px-4 py-1 border rounded-full cursor-pointer ${selectedCategory === item ? 'bg-purple-50 text-purple-700' : 'text-gray-500 border-gray-300'}`} key={item}>{item}</span>
             ) )}
           </div>
           <br />
@@ -40,7 +40,7 @@ const BlogTitles = () => {
         <div className='w-full max-w-lg p-4 bg-white rounded-lg flex flex-col border border-gray-200 min-h-96'>
             <div className='flex items-center gap-3'>
               <Hash className='w-5 h-5 text-[#8E37EB]' />
-              <h1 className='text-xl font-semibold'>Generate Titles</h1>
+              <h1 className='text-xl font-semibold'>Generated Titles</h1>
             </div>
             <div className='flex-1 flex justify-center items-center'>
               <div className='text-sm flex flex-col items-center gap-5 text-gray-400'>
