@@ -8,10 +8,15 @@ import WriteArticle from './pages/WriteArticle';
 import BlogTitles from './pages/BlogTitles';
 import RemoveBackground from './pages/RemoveBackground';
 import GenerateImg from './pages/GenerateImg';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom';
+import { useAuth } from '@clerk/clerk-react';
 
 const App = () => {
+  const {getToken} = useAuth();
+  useEffect(() => {
+    getToken().then((token)=> console.log(token));
+  },[])
   return (
     <div>
       <Routes>
