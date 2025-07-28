@@ -11,14 +11,13 @@ import GenerateImg from './pages/GenerateImg';
 import React, { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
+import { Toaster } from 'react-hot-toast';
 
 const App = () => {
-  const {getToken} = useAuth();
-  useEffect(() => {
-    getToken().then((token)=> console.log(token));
-  },[])
+  
   return (
     <div>
+      <Toaster />
       <Routes>
         <Route path='/' element={<Home/>} />
         <Route path='/ai' element={<Layout/>}>
