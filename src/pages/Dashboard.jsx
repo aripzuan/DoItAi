@@ -4,6 +4,7 @@ import { Protect, useAuth, useUser } from '@clerk/clerk-react'
 import CreationItem from '../components/CreationItem'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import { Link } from 'react-router-dom'
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -158,25 +159,27 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Free User Warning */}
       {isFreeUser && (
-        <div className='bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-2xl p-6'>
-          <div className='flex items-center space-x-3'>
-            <div className='w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center'>
-              <Lock className='w-5 h-5 text-yellow-600' />
-            </div>
-            <div className='flex-1'>
-              <h3 className='text-lg font-semibold text-yellow-800'>Free Plan Limitations</h3>
-              <p className='text-yellow-700 mt-1'>
-                You have {remainingFreeUsage} free uses remaining. Upgrade to Premium to unlock unlimited access to all AI tools including image generation, background removal, and resume review.
-              </p>
-            </div>
-            <button className='bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:shadow-glow'>
-              Upgrade Now
-            </button>
-          </div>
-        </div>
-      )}
+  <div className='bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-2xl p-6'>
+    <div className='flex items-center space-x-3'>
+      <div className='w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center'>
+        <Lock className='w-5 h-5 text-yellow-600' />
+      </div>
+      <div className='flex-1'>
+        <h3 className='text-lg font-semibold text-yellow-800'>Free Plan Limitations</h3>
+        <p className='text-yellow-700 mt-1'>
+          You have {remainingFreeUsage} free uses remaining. Upgrade to Premium to unlock unlimited access to all AI tools including image generation, background removal, and resume review.
+        </p>
+      </div>
+      <Link
+        to="/pricing"
+        className='bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:shadow-glow'
+      >
+        Upgrade Now
+      </Link>
+    </div>
+  </div>
+)}
 
       {/* Recent Creations */}
       <div className='bg-white rounded-2xl shadow-soft border border-gray-100 p-6'>
