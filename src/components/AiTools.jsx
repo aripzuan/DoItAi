@@ -2,27 +2,86 @@ import React from 'react'
 import { AiToolsData } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '@clerk/clerk-react'
+import { ArrowRight, Sparkles } from 'lucide-react'
 
 export const AiTools = () => {
     const navigate = useNavigate()
     const {user} = useUser()
   return (
-    <div className='px-4 sm:px-20 xl:px-32 my-24'>
-        <div className='text-center '>
-            <h2 className='text-slate-700 text-[42px] font-semibold'>Create with Confidence</h2>
-            <p className='text-gray-600 max-w-lg mx-auto'>From first draft to final design, our AI tools help you craft stunning content — faster, easier, and smarter.</p>
-
-        </div>
-
-        <div className='flex flex-wrap mt-10 justify-center'>
-            {AiToolsData.map((tool, index) => (
-                <div key={index} className='p-8 m-4 max-w-xs rounded-lg bg-[#FDFDFE] shadow-lg border border-gray-100 hover:-translate-y-1 transition-all duration-300 cursor-pointer' onClick={()=> user && navigate(tool.path)}>
-                    <tool.Icon className='w-12 h-12 p-3 text-white rounded-xl' style={{background: `linear-gradient(to bottom, ${tool.bg.from}, ${tool.bg.to})`}}/>
-                    <h3 className='mt-6 mb-3 text-lg font-semibold'>{tool.title}</h3>
-                    <p className='text-gray-400 text-sm max-w-[95%]'>{tool.description}</p>
+    <section className='py-16 bg-gradient-to-b from-gray-50 to-white'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+            {/* Section Header */}
+            <div className='text-center mb-12'>
+                <div className='inline-flex items-center gap-2 bg-primary/10 text-primary rounded-full px-4 py-2 mb-6'>
+                    <Sparkles className='w-4 h-4'/>
+                    <span className='text-sm font-medium'>AI-Powered Tools</span>
                 </div>
-            ))}
+                <h2 className='text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6'>
+                    Create with{' '}
+                    <span className='relative'>
+                        <span className='relative z-10'>Confidence</span>
+                        <div className='absolute -bottom-2 left-0 right-0 h-3 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-full'></div>
+                    </span>
+                </h2>
+                <p className='text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed'>
+                    From first draft to final design, our AI tools help you craft stunning content — faster, easier, and smarter than ever before.
+                </p>
+            </div>
+
+            {/* Tools Grid */}
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+                {AiToolsData.map((tool, index) => (
+                                    <div 
+                    key={index} 
+                    className='group relative bg-white rounded-2xl p-6 shadow-soft hover:shadow-large border border-gray-100 hover:border-primary/20 transition-all duration-300 cursor-pointer transform hover:-translate-y-2' 
+                    onClick={()=> user && navigate(tool.path)}
+                    style={{animationDelay: `${index * 0.1}s`}}
+                >
+                        {/* Background gradient on hover */}
+                        <div className='absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
+                        
+                        {/* Icon */}
+                        <div className='relative z-10'>
+                            <div 
+                                className='w-14 h-14 rounded-2xl flex items-center justify-center mb-4 shadow-medium group-hover:shadow-glow transition-all duration-300'
+                                style={{background: `linear-gradient(135deg, ${tool.bg.from}, ${tool.bg.to})`}}
+                            >
+                                <tool.Icon className='w-7 h-7 text-white'/>
+                            </div>
+                        </div>
+
+                        {/* Content */}
+                        <div className='relative z-10'>
+                            <h3 className='text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-300'>
+                                {tool.title}
+                            </h3>
+                            <p className='text-gray-600 leading-relaxed mb-4'>
+                                {tool.description}
+                            </p>
+                            
+                            {/* CTA */}
+                            <div className='flex items-center gap-2 text-primary font-medium group-hover:gap-3 transition-all duration-300'>
+                                <span className='text-sm'>Get Started</span>
+                                <ArrowRight className='w-4 h-4 group-hover:translate-x-1 transition-transform'/>
+                            </div>
+                        </div>
+
+                        {/* Hover effect overlay */}
+                        <div className='absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Bottom CTA */}
+            <div className='text-center mt-12'>
+                <div className='inline-flex items-center gap-2 text-gray-600'>
+                    <div className='w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center'>
+                        <Sparkles className='w-4 h-4 text-primary'/>
+                    </div>
+                    <span className='text-sm font-medium'>All tools powered by advanced AI</span>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
   )
 }
