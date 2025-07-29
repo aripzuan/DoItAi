@@ -12,6 +12,7 @@ import Pricing from './pages/Pricing';
 import React from 'react'
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import ErrorPage from './pages/ErrorPage';
 
 const App = () => {
   
@@ -31,6 +32,7 @@ const App = () => {
           <Route path='review-resume' element={<ReviewResume/>} />
           <Route path='community' element={<Community/>} />
         </Route>
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </div>
   )

@@ -113,7 +113,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   onClick={(e) => {
                     if (isLocked) {
                       e.preventDefault();
-                      // Could add upgrade modal here
+                      navigate('/pricing'); // Redirect to upgrade page
                       return;
                     }
                     setSidebarOpen(false);
