@@ -107,7 +107,10 @@ const GenerateImg = () => {
                   <span>Resume review</span>
                 </div>
               </div>
-              <button className='w-full bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:shadow-glow mt-6'>
+              <button 
+                className='w-full bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:shadow-glow mt-6'
+                onClick={() => window.location.href = '/pricing'}
+              >
                 Upgrade to Premium
               </button>
             </div>
