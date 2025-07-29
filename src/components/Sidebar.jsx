@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { assets } from '../assets/assets'
 import axios from 'axios'
 import { useAuth } from '@clerk/clerk-react'
+import { Link } from 'react-router-dom'
 
 const navItems = [
     {to: '/ai', label: 'Dashboard', Icon: House, description: 'Overview & Analytics', premium: false},
@@ -183,6 +184,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         </nav>
 
         {/* Premium Upgrade Banner for Free Users */}
+        {/* Premium Upgrade Banner for Free Users */}
         {isPremium === false && (
           <div className='mx-4 mb-4 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-xl'>
             <div className='flex items-center space-x-3 mb-3'>
@@ -192,11 +194,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <p className='text-xs text-yellow-700 mb-3'>
               Unlock unlimited access to all AI tools including image generation, background removal, and resume review.
             </p>
-            <button className='w-full bg-primary hover:bg-primary-dark text-white text-sm px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:shadow-glow'>
+            <Link
+              to="/pricing"
+              className='w-full block text-center bg-primary hover:bg-primary-dark text-white text-sm px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:shadow-glow'
+            >
               Upgrade Now
-            </button>
+            </Link>
           </div>
         )}
+
 
         {/* Footer */}
         <div className='p-4 border-t border-gray-200 space-y-2'>
