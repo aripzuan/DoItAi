@@ -98,7 +98,20 @@
 }
 
 .cl-drawerRoot {
-  z-index: 10;
+  z-index: 9999 !important;
+}
+
+/* Ensure Clerk payment modals appear above everything */
+.cl-modalRoot,
+.cl-modalBackdrop,
+.cl-modalContent {
+  z-index: 9999 !important;
+}
+
+/* Additional Clerk components that might need high z-index */
+.cl-popoverRoot,
+.cl-popoverContent {
+  z-index: 9999 !important;
 }
 
 /* Glass morphism effect */

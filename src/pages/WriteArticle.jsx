@@ -44,55 +44,86 @@ const WriteArticle = () => {
     setLoading(false);
   } 
   return (
-    <div className='h-full overflow-y-scroll p-1 flex items-start flex-wrap gap-2 text-slate-700'>
-        {/* left col */}
-        <form onSubmit={onSubmitHandler} className='w-full max-w-lg p-2 bg-white rounded-lg border border-gray-200'>
-          <div className='flex items-center gap-2'>
-            <Sparkles className='w-5 text-[#4A7AFF]'/>
-            <h1 className='text-lg font-semibold'>Article Configuration</h1>
-          </div>
-          <p className='mt-2 text-sm font-medium'>Article Topic</p>
+    <div className='h-full overflow-y-auto p-6'>
+      <div className='max-w-6xl mx-auto'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+          {/* left col */}
+          <form onSubmit={onSubmitHandler} className='w-full bg-white rounded-2xl shadow-soft border border-gray-200 p-6'>
+            <div className='flex items-center gap-2 mb-6'>
+              <Sparkles className='w-6 h-6 text-[#4A7AFF]'/>
+              <h1 className='text-xl font-semibold'>Article Configuration</h1>
+            </div>
+            
+            <div className='space-y-6'>
+              <div>
+                <p className='text-sm font-medium text-gray-700 mb-2'>Article Topic</p>
+                <input 
+                  onChange={(e)=>setInput(e.target.value)} 
+                  value={input} 
+                  type="text" 
+                  className='w-full p-3 outline-none text-sm rounded-xl border border-gray-300 focus:border-[#4A7AFF] focus:ring-2 focus:ring-[#4A7AFF]/20 transition-all' 
+                  placeholder='The future of artificial intelligence is...' 
+                  required 
+                />
+              </div>
 
-          <input onChange={(e)=>setInput(e.target.value)} value={input} type="text" className='w-full p-2 px-3 mt-1 outline-none text-sm rounded-md border border-gray-300'placeholder='The future of artificial intelligence is...' required />
+              <div>
+                <p className='text-sm font-medium text-gray-700 mb-3'>Article Length</p>
+                <div className='flex gap-2 flex-wrap'>
+                  {articleLength.map((item, index)=> (
+                    <span 
+                      onClick={()=> setSelectedOption(item)} 
+                      className={`text-sm px-4 py-2 border rounded-full cursor-pointer transition-all ${
+                        selectedOption.text === item.text 
+                          ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                          : 'text-gray-500 border-gray-300 hover:border-gray-400'
+                      }`} 
+                      key={index}
+                    >
+                      {item.text}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              <button 
+                disabled={loading} 
+                className='w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#226BFF] to-[#65ADFF] text-white px-6 py-3 text-sm rounded-xl font-medium hover:shadow-glow transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
+              >
+                {loading ? (
+                  <span className='w-5 h-5 rounded-full border-2 border-t-transparent animate-spin'></span>
+                ) : (
+                  <Edit2 className='w-5 h-5'/>
+                )}
+                Generate Article
+              </button>
+            </div>
+          </form>
 
-          <p className='mt-2 text-sm font-medium'>Article Length</p>
-
-          <div className='mt-1 flex gap-1 flex-wrap sm:max-w-9/11'>
-            {articleLength.map((item, index)=> (
-              <span onClick={()=> setSelectedOption(item)} className={`text-xs px-2 py-1 border rounded-full cursor-pointer ${selectedOption.text === item.text ? 'bg-blue-50 text-blue-700' : 'text-gray-500 border-gray-300'}`} key={index}>{item.text}</span>
-            ) )}
-          </div>
-          
-          <button disabled={loading} className='w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#226BFF] to-[#65ADFF] text-white px-4 py-2 mt-2 text-sm rounded-lg cursor-pointer'>
-            {
-              loading ? <span className='w-4 h-4 my-1 rounded-full border-2 border-t-transparent animate-spin'></span>
-              : <Edit2 className='w-5'/>
-            }
-            Generate Article
-          </button>
-        </form>
-        {/* right col */}
-        <div className='w-full max-w-lg p-2 bg-white rounded-lg flex flex-col border border-gray-200 min-h-64 max-h-[400px]'>
-            <div className='flex items-center gap-2'>
-              <Edit className='w-5 h-5 text-[#4A7AFF]' />
-              <h1 className='text-lg font-semibold'>Generated Article</h1>
+          {/* right col */}
+          <div className='w-full bg-white rounded-2xl shadow-soft border border-gray-200 p-6 flex flex-col min-h-[500px]'>
+            <div className='flex items-center gap-2 mb-6'>
+              <Edit className='w-6 h-6 text-[#4A7AFF]' />
+              <h1 className='text-xl font-semibold'>Generated Article</h1>
             </div>
 
             {!content ? (
               <div className='flex-1 flex justify-center items-center'>
-                            <div className='text-sm flex flex-col items-center gap-1 text-gray-400'>
-                 <Edit className='w-5 h-5' />
-                 <p>Enter a topic and click 'Generate Article' to get started</p>
-               </div>
-            </div>
+                <div className='text-center'>
+                  <Edit className='w-16 h-16 text-gray-300 mx-auto mb-4' />
+                  <p className='text-gray-500 font-medium'>Enter a topic and click 'Generate Article' to get started</p>
+                </div>
+              </div>
             ) : (
-              <div className='mt-2 h-full overflow-y-scroll text-sm text-slate-600'>
-                <div className='reset-tw'>
-                  <Markdown>{content}</Markdown></div>
+              <div className='flex-1 overflow-y-auto'>
+                <div className='prose prose-sm max-w-none text-gray-700'>
+                  <Markdown>{content}</Markdown>
+                </div>
               </div>
             )}
-            
+          </div>
         </div>
+      </div>
     </div>
   )
 }

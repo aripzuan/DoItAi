@@ -8,9 +8,9 @@ import WriteArticle from './pages/WriteArticle';
 import BlogTitles from './pages/BlogTitles';
 import RemoveBackground from './pages/RemoveBackground';
 import GenerateImg from './pages/GenerateImg';
-import React, { useEffect } from 'react'
+import Pricing from './pages/Pricing';
+import React from 'react'
 import { Routes, Route } from 'react-router-dom';
-import { useAuth } from '@clerk/clerk-react';
 import { Toaster } from 'react-hot-toast';
 
 const App = () => {
@@ -20,6 +20,7 @@ const App = () => {
       <Toaster />
       <Routes>
         <Route path='/' element={<Home/>} />
+        <Route path='/pricing' element={<Pricing/>} />
         <Route path='/ai' element={<Layout/>}>
           <Route index element={<Dashboard/>} />
           <Route path='write-article' element={<WriteArticle/>} />

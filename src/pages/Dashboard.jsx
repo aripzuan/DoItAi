@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Gem, Sparkles, TrendingUp, Clock, Zap, Crown } from 'lucide-react'
-import { Protect, useAuth } from '@clerk/clerk-react'
+import { Gem, Sparkles, TrendingUp, Clock, Zap, Crown, Lock } from 'lucide-react'
+import { Protect, useAuth, useUser } from '@clerk/clerk-react'
 import CreationItem from '../components/CreationItem'
 import axios from 'axios'
 import toast from 'react-hot-toast'
@@ -11,19 +11,48 @@ const Dashboard = () => {
 
   const [creation, setCreation] = useState([])
   const [loading, setLoading] = useState(true);
+  const [userStats, setUserStats] = useState({
+    totalCreations: 0,
+    recentActivity: 0,
+    freeUsage: 0,
+    plan: 'free',
+    growthPercentage: 0,
+    remainingFreeUsage: 10
+  });
+  const [isPremium, setIsPremium] = useState(null);
 
   const {getToken} = useAuth()
+  const { user } = useUser()
 
   const getDashboardData = async () => {
     try {
-      const {data} = await axios.get('/api/user/get-user-creations', {
+      // Get user statistics
+      const statsResponse = await axios.get('/api/user/get-user-stats', {
         headers: {Authorization: `Bearer ${await getToken()}`}
       });
 
-      if (data.success) {
-        setCreation(data.creations);
+      if (statsResponse.data.success) {
+        setUserStats(statsResponse.data.stats);
+      }
+
+      // Get user plan status
+      const planResponse = await axios.get('/api/user/get-user-plan', {
+        headers: {Authorization: `Bearer ${await getToken()}`}
+      });
+
+      if (planResponse.data.success) {
+        setIsPremium(planResponse.data.hasPremium);
+      }
+
+      // Get user creations
+      const creationsResponse = await axios.get('/api/user/get-user-creations', {
+        headers: {Authorization: `Bearer ${await getToken()}`}
+      });
+
+      if (creationsResponse.data.success) {
+        setCreation(creationsResponse.data.creations);
       } else {
-        toast.error(data.message);
+        toast.error(creationsResponse.data.message);
       }
     } catch (error) {
       toast.error(error.message);
@@ -33,7 +62,18 @@ const Dashboard = () => {
 
   useEffect(()=> {
     getDashboardData()
-  }, [])
+    
+    // Set up real-time updates every 30 seconds
+    const interval = setInterval(() => {
+      getDashboardData()
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [user])
+
+  // Calculate remaining free usage
+  const remainingFreeUsage = userStats.remainingFreeUsage || 10 - userStats.freeUsage;
+  const isFreeUser = !isPremium;
 
   return (
     <div className='space-y-6'>
@@ -45,7 +85,6 @@ const Dashboard = () => {
         </div>
         <div className='flex items-center space-x-2 bg-primary/10 text-primary rounded-full px-4 py-2'>
           <Sparkles className='w-4 h-4'/>
-          <span className='text-sm font-medium'>AI Studio</span>
         </div>
       </div>
 
@@ -61,8 +100,7 @@ const Dashboard = () => {
           </div>
           <div>
             <p className='text-sm font-medium text-gray-600 mb-1'>Total Creations</p>
-            <h3 className='text-2xl font-bold text-gray-900'>{creation.length}</h3>
-            <p className='text-xs text-green-600 mt-1'>+12% from last month</p>
+            <h3 className='text-2xl font-bold text-gray-900'>{userStats.totalCreations}</h3>
           </div>
         </div>
 
@@ -77,10 +115,10 @@ const Dashboard = () => {
           <div>
             <p className='text-sm font-medium text-gray-600 mb-1'>Active Plan</p>
             <h3 className='text-2xl font-bold text-gray-900'>
-              <Protect plan='premium' fallback="Free">Premium</Protect>
+              {isPremium ? 'Premium' : 'Free'}
             </h3>
             <p className='text-xs text-gray-500 mt-1'>
-              <Protect plan='premium' fallback="Upgrade to unlock more features">All features unlocked</Protect>
+              {isPremium ? 'All features unlocked' : 'Upgrade to unlock more features'}
             </p>
           </div>
         </div>
@@ -95,7 +133,7 @@ const Dashboard = () => {
           </div>
           <div>
             <p className='text-sm font-medium text-gray-600 mb-1'>Recent Activity</p>
-            <h3 className='text-2xl font-bold text-gray-900'>{creation.slice(0, 3).length}</h3>
+            <h3 className='text-2xl font-bold text-gray-900'>{userStats.recentActivity}</h3>
             <p className='text-xs text-gray-500 mt-1'>Last 24 hours</p>
           </div>
         </div>
@@ -111,18 +149,38 @@ const Dashboard = () => {
           <div>
             <p className='text-sm font-medium text-gray-600 mb-1'>AI Credits</p>
             <h3 className='text-2xl font-bold text-gray-900'>
-              <Protect plan='premium' fallback="50">∞</Protect>
+              {isPremium ? '∞' : remainingFreeUsage}
             </h3>
             <p className='text-xs text-gray-500 mt-1'>
-              <Protect plan='premium' fallback="Limited credits">Unlimited usage</Protect>
+              {isPremium ? 'Unlimited usage' : `${remainingFreeUsage} remaining`}
             </p>
           </div>
         </div>
       </div>
 
-              {/* Recent Creations */}
-        <div className='bg-white rounded-2xl shadow-soft border border-gray-100 p-6'>
-            <div className='flex items-center justify-between mb-4'>
+      {/* Free User Warning */}
+      {isFreeUser && (
+        <div className='bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-2xl p-6'>
+          <div className='flex items-center space-x-3'>
+            <div className='w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center'>
+              <Lock className='w-5 h-5 text-yellow-600' />
+            </div>
+            <div className='flex-1'>
+              <h3 className='text-lg font-semibold text-yellow-800'>Free Plan Limitations</h3>
+              <p className='text-yellow-700 mt-1'>
+                You have {remainingFreeUsage} free uses remaining. Upgrade to Premium to unlock unlimited access to all AI tools including image generation, background removal, and resume review.
+              </p>
+            </div>
+            <button className='bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:shadow-glow'>
+              Upgrade Now
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Recent Creations */}
+      <div className='bg-white rounded-2xl shadow-soft border border-gray-100 p-6'>
+        <div className='flex items-center justify-between mb-4'>
           <h2 className='text-xl font-bold text-gray-900'>Recent Creations</h2>
           <button className='text-primary hover:text-primary-dark font-medium text-sm transition-colors duration-200'>
             View All
@@ -136,7 +194,18 @@ const Dashboard = () => {
         ) : creation.length > 0 ? (
           <div className='space-y-3'>
             {creation.map((item) => (
-              <CreationItem key={item.id} item={item} />
+              <CreationItem 
+                key={item.id} 
+                item={item} 
+                onDelete={(deletedId) => {
+                  setCreation(prev => prev.filter(item => item.id !== deletedId));
+                  // Update stats
+                  setUserStats(prev => ({
+                    ...prev,
+                    totalCreations: prev.totalCreations - 1
+                  }));
+                }}
+              />
             ))}
           </div>
         ) : (

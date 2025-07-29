@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import { Outlet, useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets';
-import { Menu, X, Sparkles } from 'lucide-react';
+import { Menu, X, Sparkles, Crown } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import { SignIn, useUser } from '@clerk/clerk-react';
 
@@ -17,7 +17,7 @@ const Layout = () => {
         {/* Main content */}
         <div className='flex-1 flex flex-col overflow-hidden'>
             {/* Top navigation */}
-            <nav className='bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between'>
+            <nav className='bg-white/95 backdrop-blur-sm border-b border-gray-200 px-6 py-4 flex items-center justify-between shadow-sm'>
                 <div className='flex items-center space-x-4'>
                     <button 
                         onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -27,17 +27,21 @@ const Layout = () => {
                     </button>
                     <div className='flex items-center space-x-2 cursor-pointer group' onClick={()=> navigate('/')}>
                         <img className="w-8 h-8 transition-transform group-hover:scale-105" src={assets.logo} alt="logo" />
-                        <div className='flex items-center space-x-1'>
-                            <Sparkles className='w-4 h-4 text-primary animate-pulse-slow'/>
-                            <span className='text-sm font-medium text-gray-700'>AI Studio</span>
-                        </div>
                     </div>
                 </div>
                 
                 <div className='flex items-center space-x-4'>
-                    <div className='hidden sm:flex items-center space-x-2 text-sm text-gray-600'>
-                        <div className='w-2 h-2 bg-green-400 rounded-full'></div>
-                        <span>All systems operational</span>
+                    <button 
+                        onClick={() => navigate('/pricing')}
+                        className='hidden sm:flex items-center space-x-2 text-sm text-gray-600 hover:text-primary transition-colors duration-200'
+                    >
+                        <Crown className='w-4 h-4' />
+                        <span className='font-medium'>Pricing</span>
+                    </button>
+                    <div className='hidden sm:flex items-center space-x-3'>
+                        <div className='w-8 h-8 bg-primary rounded-full flex items-center justify-center'>
+                            <span className='text-white text-sm font-semibold'>{user.firstName?.charAt(0).toUpperCase()}</span>
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -56,10 +60,6 @@ const Layout = () => {
             <div className='text-center mb-8'>
                 <div className='flex items-center justify-center space-x-2 mb-4'>
                     <img className="w-12 h-12" src={assets.logo} alt="logo" />
-                    <div className='flex items-center space-x-1'>
-                        <Sparkles className='w-5 h-5 text-primary'/>
-                        <span className='text-xl font-semibold'>AI Studio</span>
-                    </div>
                 </div>
                 <h2 className='text-2xl font-bold text-gray-900 mb-2'>Welcome Back</h2>
                 <p className='text-gray-600'>Sign in to access your AI tools</p>

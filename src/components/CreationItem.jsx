@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
 import Markdown from 'react-markdown'
-import { ChevronDown, ChevronUp, Calendar, FileText, Image, Clock } from 'lucide-react'
+import { ChevronDown, ChevronUp, Calendar, FileText, Image, Clock, Trash2 } from 'lucide-react'
+import axios from 'axios'
+import toast from 'react-hot-toast'
+import { useAuth } from '@clerk/clerk-react'
 
-const CreationItem = ({item}) => {
+const CreationItem = ({item, onDelete}) => {
     const [expanded, setExpanded] = useState(false)
+    const {getToken} = useAuth();
 
     const getTypeIcon = (type) => {
         switch(type) {
@@ -24,6 +28,29 @@ const CreationItem = ({item}) => {
                 return 'bg-green-100 text-green-700 border-green-200'
             default:
                 return 'bg-gray-100 text-gray-700 border-gray-200'
+        }
+    }
+
+    const handleDelete = async (e) => {
+        e.stopPropagation(); // Prevent expanding the item
+        
+        if (window.confirm('Are you sure you want to delete this creation? This action cannot be undone.')) {
+            try {
+                const {data} = await axios.delete(`/api/user/delete-creation/${item.id}`, {
+                    headers: {Authorization: `Bearer ${await getToken()}`}
+                })
+
+                if (data.success) {
+                    toast.success(data.message);
+                    if (onDelete) {
+                        onDelete(item.id);
+                    }
+                } else {
+                    toast.error(data.message);
+                }
+            } catch (error) {
+                toast.error(error.message);
+            }
         }
     }
 
@@ -54,6 +81,13 @@ const CreationItem = ({item}) => {
                         {getTypeIcon(item.type)}
                         <span>{item.type}</span>
                     </div>
+                    <button 
+                        onClick={handleDelete}
+                        className='p-2 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors duration-200'
+                        title='Delete creation'
+                    >
+                        <Trash2 className='w-4 h-4' />
+                    </button>
                     <button className='p-1 rounded-lg hover:bg-gray-100 transition-colors duration-200'>
                         {expanded ? <ChevronUp className='w-5 h-5 text-gray-500' /> : <ChevronDown className='w-5 h-5 text-gray-500' />}
                     </button>
