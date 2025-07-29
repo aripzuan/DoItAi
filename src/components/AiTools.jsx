@@ -29,48 +29,43 @@ export const AiTools = () => {
             </div>
 
             {/* Tools Grid */}
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
-                {AiToolsData.map((tool, index) => (
-                                    <div 
-                    key={index} 
-                    className='group relative bg-white rounded-2xl p-6 shadow-soft hover:shadow-large border border-gray-100 hover:border-primary/20 transition-all duration-300 cursor-pointer transform hover:-translate-y-2' 
-                    onClick={()=> user && navigate(tool.path)}
-                    style={{animationDelay: `${index * 0.1}s`}}
-                >
-                        {/* Background gradient on hover */}
-                        <div className='absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
-                        
-                        {/* Icon */}
-                        <div className='relative z-10'>
-                            <div 
-                                className='w-14 h-14 rounded-2xl flex items-center justify-center mb-4 shadow-medium group-hover:shadow-glow transition-all duration-300'
-                                style={{background: `linear-gradient(135deg, ${tool.bg.from}, ${tool.bg.to})`}}
-                            >
-                                <tool.Icon className='w-7 h-7 text-white'/>
-                            </div>
-                        </div>
+            <div className="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+  {AiToolsData.map((tool, index) => (
+    <div
+      key={index}
+      className="group relative bg-white rounded-2xl p-6 shadow-md hover:shadow-xl border border-gray-100 hover:border-primary/30 transition-all duration-300 cursor-pointer hover:-translate-y-2"
+      onClick={() => user && navigate(tool.path)}
+      style={{ animationDelay: `${index * 0.1}s` }}
+    >
+      {/* Icon */}
+      <div className="relative z-10">
+        <div
+          className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 shadow group-hover:shadow-lg transition"
+          style={{
+            background: `linear-gradient(135deg, ${tool.bg.from}, ${tool.bg.to})`,
+          }}
+        >
+          <tool.Icon className="w-7 h-7 text-white" />
+        </div>
+      </div>
 
-                        {/* Content */}
-                        <div className='relative z-10'>
-                            <h3 className='text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-300'>
-                                {tool.title}
-                            </h3>
-                            <p className='text-gray-600 leading-relaxed mb-4'>
-                                {tool.description}
-                            </p>
-                            
-                            {/* CTA */}
-                            <div className='flex items-center gap-2 text-primary font-medium group-hover:gap-3 transition-all duration-300'>
-                                <span className='text-sm'>Get Started</span>
-                                <ArrowRight className='w-4 h-4 group-hover:translate-x-1 transition-transform'/>
-                            </div>
-                        </div>
+      {/* Content */}
+      <div className="relative z-10">
+        <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+          {tool.title}
+        </h3>
+        <p className="text-gray-600 text-sm leading-relaxed mb-4">
+          {tool.description}
+        </p>
+        <div className="flex items-center gap-2 text-primary font-medium group-hover:gap-3 transition-all">
+          <span className="text-sm">Get Started</span>
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
 
-                        {/* Hover effect overlay */}
-                        <div className='absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
-                    </div>
-                ))}
-            </div>
 
             {/* Bottom CTA */}
             <div className='text-center mt-12'>
